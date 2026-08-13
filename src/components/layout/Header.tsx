@@ -171,10 +171,10 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          <Link href="/space-saver" className="flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition">
-            <SlidersHorizontal className="w-4 h-4 text-sky-500" />
-            <span>Studio / Space Saver</span>
-          </Link>
+           <Link href="/products" className="flex items-center gap-1.5 hover:text-sky-600 dark:hover:text-sky-400 transition">
+             <SlidersHorizontal className="w-4 h-4 text-sky-500" />
+             <span>All Products</span>
+           </Link>
         </nav>
 
         {/* Right Action Controls */}

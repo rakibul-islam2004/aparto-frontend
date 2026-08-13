@@ -64,12 +64,12 @@ export const HeroSlider: React.FC = () => {
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
 
-              <Link
-                href="/collections/cleo-enigma"
-                className="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 font-semibold px-7 py-3.5 rounded-xl flex items-center justify-center gap-2 transition"
-              >
-                <span>Explore Cleo Enigma Series</span>
-              </Link>
+               <Link
+                 href="/products"
+                 className="bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-100 font-semibold px-7 py-3.5 rounded-xl flex items-center justify-center gap-2 transition"
+               >
+                 <span>Explore All Products</span>
+               </Link>
             </div>
 
             {/* BD Trust Badge Strip */}
