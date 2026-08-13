@@ -229,6 +229,20 @@ export enum OrderStatus {
   RETURNED = "RETURNED",
 }
 
+export interface Review {
+  id: string;
+  userId: string;
+  userName: string;
+  productId: string;
+  rating: number;
+  title?: string;
+  comment?: string;
+  isVerified: boolean;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export enum PaymentStatus {
   PENDING = "PENDING",
   PARTIALLY_PAID = "PARTIALLY_PAID",

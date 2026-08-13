@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCart } from "@/hooks/useCart";
 import { Trash2, Plus, Minus, ShoppingBag, ArrowRight } from "lucide-react";
 
@@ -25,7 +25,7 @@ export function CartPageClient() {
         <div className="text-center">
           <ShoppingBag className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-2xl font-semibold mb-2">Your cart is empty</h2>
-          <p className="text-muted-foreground mb-6">Looks like you haven't added anything to your cart yet.</p>
+          <p className="text-muted-foreground mb-6">Looks like you haven&apos;t added anything to your cart yet.</p>
           <Button asChild size="lg">
             <Link href="/products">Start Shopping</Link>
           </Button>
@@ -47,7 +47,7 @@ export function CartPageClient() {
     if (newQuantity <= 0) {
       await removeItem(itemId);
     } else {
-      await updateItem(itemId, newQuantity);
+      await updateItem({ itemId, quantity: newQuantity });
     }
     setUpdatingItems((prev) => {
       const next = new Set(prev);
@@ -73,7 +73,7 @@ export function CartPageClient() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             Shopping Cart ({cart.items.length})
           </h1>
-          <Button variant="ghost" size="sm" onClick={clearCart}>
+          <Button variant="ghost" size="sm" onClick={() => clearCart()}>
             <Trash2 className="h-4 w-4 mr-1" />
             Clear all
           </Button>

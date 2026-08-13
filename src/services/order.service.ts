@@ -4,6 +4,7 @@ import type { Order, OrderItem, Address } from "@/types";
 export interface CreateOrderPayload {
   shippingAddress: Record<string, any>;
   billingAddress?: Record<string, any>;
+  shipping?: number;
   couponCode?: string;
   notes?: string;
 }
@@ -11,6 +12,14 @@ export interface CreateOrderPayload {
 export const orderService = {
   async createOrder(payload: CreateOrderPayload) {
     const { data } = await api.post<Order>("/orders", payload);
+    return data;
+  },
+
+  async initiatePayment(orderId: string, gateway: string) {
+    const { data } = await api.post<{ payment: any; redirectUrl: string }>("/payments/initiate", {
+      orderId,
+      gateway,
+    });
     return data;
   },
 

@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
-import { categoriesApi, brandsApi, productsApi } from "@/services/catalog.service";
 import type { Category, Brand, Product } from "@/types";
 
 interface ProductFiltersProps {

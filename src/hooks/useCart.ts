@@ -2,6 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import type { ProductMedia } from "@/types";
 
 interface CartItem {
   id: string;
@@ -16,7 +17,7 @@ interface CartItem {
       id: string;
       name: string;
       slug: string;
-      media: { url: string; altText?: string }[];
+      media: ProductMedia[];
     };
   };
 }

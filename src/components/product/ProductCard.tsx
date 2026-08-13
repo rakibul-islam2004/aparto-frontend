@@ -55,7 +55,6 @@ export function ProductCard({ product }: ProductCardProps) {
 
         <div className="absolute top-2 left-2 flex flex-col gap-1">
           {hasSale && <Badge variant="sale">Sale</Badge>}
-          {product.status === "NEW" && <Badge variant="new">New</Badge>}
         </div>
 
         <div className="absolute top-2 right-2 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">

@@ -9,7 +9,29 @@ import { Input } from "@/components/ui/input";
 import { useCart } from "@/hooks/useCart";
 import { useAuthStore } from "@/stores/auth.store";
 import { orderService } from "@/services/order.service";
-import { ShoppingBag, ArrowRight, Lock } from "lucide-react";
+import { PaymentMethodSelector, PaymentMethod } from "@/components/payment/PaymentMethodSelector";
+import { ShoppingBag, ArrowRight, Lock, CreditCard, Truck, Banknote } from "lucide-react";
+
+const paymentMethods: PaymentMethod[] = [
+  {
+    id: "SSLCOMMERZ",
+    name: "Online Payment",
+    description: "Pay securely with credit/debit card, mobile banking, or internet banking via SSLCommerz",
+    icon: <CreditCard className="h-5 w-5" />,
+  },
+  {
+    id: "SHURJOPAY",
+    name: "ShurjoPay",
+    description: "Pay via ShurjoPay gateway supporting all major Bangladeshi payment methods",
+    icon: <CreditCard className="h-5 w-5" />,
+  },
+  {
+    id: "COD",
+    name: "Cash on Delivery",
+    description: "Pay when your order is delivered to your doorstep",
+    icon: <Truck className="h-5 w-5" />,
+  },
+];
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -17,6 +39,7 @@ export default function CheckoutPage() {
   const { isAuthenticated, user } = useAuthStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
     fullName: "",
@@ -79,6 +102,11 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!selectedPayment) {
+      setError("Please select a payment method");
+      return;
+    }
+
     setIsSubmitting(true);
     setError("");
 
@@ -86,13 +114,25 @@ export default function CheckoutPage() {
       const order = await orderService.createOrder({
         shippingAddress: formData,
         billingAddress: formData,
+        shipping,
         notes: formData.notes,
       });
 
-      await clearCart();
-      router.push(`/account/orders/${order.id}`);
+      if (selectedPayment === "COD") {
+        await clearCart();
+        router.push(`/account/orders/${order.id}`);
+        return;
+      }
+
+      const paymentResult = await orderService.initiatePayment(order.id, selectedPayment);
+      if (paymentResult.redirectUrl) {
+        window.location.href = paymentResult.redirectUrl;
+      } else {
+        await clearCart();
+        router.push(`/account/orders/${order.id}`);
+      }
     } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to create order. Please try again.");
+      setError(err.response?.data?.message || "Failed to process order. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -100,7 +140,7 @@ export default function CheckoutPage() {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      <div className="lg:col-span-2">
+      <div className="lg:col-span-2 space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Shipping Information</CardTitle>
@@ -214,10 +254,23 @@ export default function CheckoutPage() {
             </form>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Payment Method</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <PaymentMethodSelector
+              methods={paymentMethods}
+              selectedMethod={selectedPayment}
+              onSelect={setSelectedPayment}
+            />
+          </CardContent>
+        </Card>
       </div>
 
       <div className="lg:col-span-1">
-        <Card>
+        <Card className="sticky top-24">
           <CardHeader>
             <CardTitle>Order Summary</CardTitle>
           </CardHeader>
@@ -250,9 +303,16 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
+              {selectedPayment && (
+                <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2">
+                  <Banknote className="h-3 w-3" />
+                  <span>Payment: {paymentMethods.find(m => m.id === selectedPayment)?.name}</span>
+                </div>
+              )}
+
               <div className="flex items-center gap-2 text-xs text-muted-foreground pt-4">
                 <Lock className="h-3 w-3" />
-                <span>Secure checkout powered by SSLCommerz</span>
+                <span>Secure checkout</span>
               </div>
             </div>
           </CardContent>

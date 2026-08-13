@@ -47,8 +47,10 @@ export const catalogService = {
     if (filters?.brandId) params.set("brandId", filters.brandId);
     if (filters?.status) params.set("status", filters.status);
     if (filters?.search) params.set("search", filters.search);
+    if (filters?.page) params.set("page", filters.page.toString());
+    if (filters?.limit) params.set("limit", filters.limit.toString());
 
-    const { data } = await api.get<Product[]>(`/products?${params.toString()}`);
+    const { data } = await api.get<{ data: Product[]; total: number; page: number; limit: number; totalPages: number }>(`/products?${params.toString()}`);
     return data;
   },
 
@@ -84,6 +86,16 @@ export const catalogService = {
 
   async updateVariant(productId: string, variantId: string, payload: Partial<ProductVariant>) {
     const { data } = await api.patch<ProductVariant>(`/products/${productId}/variants/${variantId}`, payload);
+    return data;
+  },
+
+  async getReviews(productId: string, page = 1, limit = 10) {
+    const { data } = await api.get<{ data: any[]; total: number; page: number; limit: number; totalPages: number }>(`/reviews/product/${productId}?page=${page}&limit=${limit}`);
+    return data;
+  },
+
+  async createReview(payload: { productId: string; rating: number; title?: string; comment?: string }) {
+    const { data } = await api.post("/reviews", payload);
     return data;
   },
 };

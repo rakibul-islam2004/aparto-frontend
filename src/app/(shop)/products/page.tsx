@@ -1,9 +1,8 @@
 import { Suspense } from "react";
-import { ProductGrid } from "@/components/product/ProductCard";
-import { ProductFilters } from "@/components/product/ProductFilters";
-import { useProducts, useCategoryTree, useBrands } from "@/hooks/useProducts";
+import { ProductGrid } from "@/components/product/ProductGrid";
+import { Filters } from "@/components/product/Filters";
 import { Button } from "@/components/ui/button";
-import { SlidersHorizontal, X } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
 
 export default function ProductsPage() {
   return (
@@ -29,20 +28,6 @@ export default function ProductsPage() {
           <ProductGrid />
         </Suspense>
       </div>
-    </div>
-  );
-}
-
-function Filters() {
-  const { data: categories } = useCategoryTree();
-  const { data: brands } = useBrands();
-
-  return (
-    <div className="sticky top-24">
-      <ProductFilters
-        categories={categories || []}
-        brands={brands || []}
-      />
     </div>
   );
 }

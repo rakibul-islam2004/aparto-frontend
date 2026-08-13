@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { catalogService } from "@/services/catalog.service";
 import type { Product, Category, Brand } from "@/types";
 
-export function useProducts(filters?: { categoryId?: string; brandId?: string; status?: string; search?: string }) {
+export function useProducts(filters?: { categoryId?: string; brandId?: string; status?: string; search?: string; page?: number; limit?: number }) {
   return useQuery({
     queryKey: ["products", filters],
     queryFn: () => catalogService.getProducts(filters),

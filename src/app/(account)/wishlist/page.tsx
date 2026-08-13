@@ -58,7 +58,7 @@ export default function WishlistPage() {
 
   const handleAddToCart = async (variantId: string) => {
     setAddingToCart((prev) => new Set(prev).add(variantId));
-    await addToCart(variantId);
+    await addToCart({ variantId, quantity: 1 });
     setAddingToCart((prev) => {
       const next = new Set(prev);
       next.delete(variantId);
@@ -92,8 +92,8 @@ export default function WishlistPage() {
               const product = variant?.product;
               const primaryMedia = product?.media?.find((m) => m.isPrimary) || product?.media?.[0];
               const hasSale = variant?.salePrice && Number(variant.salePrice) < Number(variant.price);
-              const isRemoving = removingItems.has(variantId);
-              const isAdding = addingToCart.has(variantId);
+              const isRemoving = removingItems.has(item.variantId);
+              const isAdding = addingToCart.has(item.variantId);
 
               return (
                 <Card key={item.id} className={`border-0 shadow-sm transition-opacity ${isRemoving ? 'opacity-50' : ''}`}>
@@ -112,7 +112,7 @@ export default function WishlistPage() {
                         variant="ghost"
                         size="icon"
                         className="absolute top-2 right-2 h-8 w-8 bg-white/90 hover:bg-white shadow-sm"
-                        onClick={() => handleRemove(variant?.id)}
+                        onClick={() => variant?.id && handleRemove(variant.id)}
                         disabled={isRemoving}
                       >
                         <Trash2 className="h-4 w-4 text-red-500" />
@@ -137,7 +137,7 @@ export default function WishlistPage() {
                         </div>
                         <Button
                           size="sm"
-                          onClick={() => handleAddToCart(variant?.id)}
+                          onClick={() => variant?.id && handleAddToCart(variant.id)}
                           disabled={isAdding || !variant}
                         >
                           <ShoppingBag className="h-4 w-4 mr-1" />

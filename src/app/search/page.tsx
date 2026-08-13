@@ -59,7 +59,7 @@ function Filters() {
 }
 
 function SearchResults({ query, categoryId, brandId }: { query: string; categoryId?: string; brandId?: string }) {
-  const { data: products, isLoading, error } = useProducts({
+  const { data: response, isLoading, error } = useProducts({
     search: query || undefined,
     categoryId: categoryId || undefined,
     brandId: brandId || undefined,
@@ -85,7 +85,7 @@ function SearchResults({ query, categoryId, brandId }: { query: string; category
     );
   }
 
-  if (!products || products.length === 0) {
+  const products = response?.data || []; if (!products || products.length === 0) {
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground mb-4">No products found</p>
@@ -94,5 +94,5 @@ function SearchResults({ query, categoryId, brandId }: { query: string; category
     );
   }
 
-  return <ProductGrid products={products} />;
+  return <ProductGrid search={query} categoryId={categoryId} brandId={brandId} />;
 }
