@@ -81,27 +81,27 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-bold text-white uppercase tracking-wider mb-4">Shop Categories</h4>
-            <ul className="space-y-2.5 text-slate-400">
-              <li><Link href="/categories/bathroom" className="hover:text-sky-400 transition">Bathroom Accessories</Link></li>
-              <li><Link href="/categories/bedroom" className="hover:text-sky-400 transition">Bedroom Series & Pillows</Link></li>
-              <li><Link href="/categories/living" className="hover:text-sky-400 transition">Wall Clocks & Decor</Link></li>
-              <li><Link href="/categories/office" className="hover:text-sky-400 transition">Studio Ergonomic Chairs</Link></li>
-            </ul>
-          </div>
+           {/* Quick Links */}
+           <div>
+             <h4 className="font-bold text-white uppercase tracking-wider mb-4">Shop Categories</h4>
+             <ul className="space-y-2.5 text-slate-400">
+               <li><Link href="/categories/bathroom" className="hover:text-sky-400 transition">Bathroom Accessories</Link></li>
+               <li><Link href="/categories/bedroom" className="hover:text-sky-400 transition">Bedroom Decor</Link></li>
+               <li><Link href="/categories/living-room" className="hover:text-sky-400 transition">Living Room</Link></li>
+               <li><Link href="/categories/storage" className="hover:text-sky-400 transition">Storage Solutions</Link></li>
+             </ul>
+           </div>
 
-          {/* Customer Service */}
-          <div>
-            <h4 className="font-bold text-white uppercase tracking-wider mb-4">Customer Care</h4>
-            <ul className="space-y-2.5 text-slate-400">
-              <li><Link href="/track-order" className="hover:text-sky-400 transition">Track Shipment</Link></li>
-              <li><Link href="/returns" className="hover:text-sky-400 transition">3-Day Return Policy</Link></li>
-              <li><Link href="/faq" className="hover:text-sky-400 transition">Frequently Asked Questions</Link></li>
-              <li><Link href="/admin/barcodes" className="hover:text-amber-400 transition font-bold">Admin Barcode Generator</Link></li>
-            </ul>
-          </div>
+           {/* Customer Service */}
+           <div>
+             <h4 className="font-bold text-white uppercase tracking-wider mb-4">Customer Care</h4>
+             <ul className="space-y-2.5 text-slate-400">
+               <li><Link href="/track-order" className="hover:text-sky-400 transition">Track Shipment</Link></li>
+               <li><Link href="/faq" className="hover:text-sky-400 transition">FAQ</Link></li>
+               <li><Link href="/contact" className="hover:text-sky-400 transition">Contact Us</Link></li>
+               <li><Link href="/terms" className="hover:text-sky-400 transition">Terms of Service</Link></li>
+             </ul>
+           </div>
 
           {/* Contact & Payment logos */}
           <div className="space-y-3">
