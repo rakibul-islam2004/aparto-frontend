@@ -14,7 +14,8 @@ import {
   ChevronDown, 
   MessageCircle,
   Building2,
-  SlidersHorizontal
+  SlidersHorizontal,
+  Loader2
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -22,6 +23,30 @@ export const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [cartCount, setCartCount] = useState(3);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  React.useEffect(() => {
+    if (!isSearchOpen || !searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setIsSearching(true);
+      try {
+        const api = (await import('@/lib/api')).default;
+        const { data } = await api.get(`/products/search?q=${encodeURIComponent(searchQuery)}`);
+        setSearchResults(data.products || []);
+      } catch (error) {
+        console.error('Search failed:', error);
+      } finally {
+        setIsSearching(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [isSearchOpen, searchQuery]);
 
   const roomCategories = [
     { name: 'Bathroom Accessories', href: '/categories/bathroom', count: '120+ Items', icon: '🛁' },
@@ -234,20 +259,56 @@ export const Header: React.FC = () => {
               </button>
             </div>
             <div className="p-4 max-h-80 overflow-y-auto">
-              <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
-                Trending Searches in BD
-              </div>
-              <div className="flex flex-wrap gap-2 mb-4">
-                {['Heritage Bath Towel 3-Set', 'Cleo Enigma Pillow Cover', 'Monrowe Wall Clock', 'Retro TV Tissue Box', 'Space Saving Shelf'].map((term, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setSearchQuery(term)}
-                    className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg hover:bg-sky-50 hover:text-sky-600 transition"
-                  >
-                    {term}
-                  </button>
-                ))}
-              </div>
+              {isSearching ? (
+                <div className="flex items-center justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                </div>
+              ) : searchQuery.trim() && searchResults.length > 0 ? (
+                <div className="space-y-2">
+                  {searchResults.map((product) => (
+                    <Link
+                      key={product.id}
+                      href={`/products/${product.slug}`}
+                      onClick={() => setIsSearchOpen(false)}
+                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                    >
+                      <div className="w-10 h-10 rounded-lg bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0">
+                        {product.media?.[0] ? (
+                          <img src={product.media[0].url} alt={product.name} className="w-full h-full object-cover rounded-lg" />
+                        ) : (
+                          <Search className="h-4 w-4 text-muted-foreground" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-sm text-slate-900 dark:text-white truncate">{product.name}</p>
+                        <p className="text-xs text-muted-foreground">{product.category?.name}</p>
+                      </div>
+                      <span className="text-sm font-semibold text-primary">
+                        ৳{product.variants?.[0] ? Number(product.variants[0].price).toLocaleString() : 'N/A'}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              ) : searchQuery.trim() && !isSearching ? (
+                <p className="text-sm text-muted-foreground text-center py-4">No products found for &quot;{searchQuery}&quot;</p>
+              ) : (
+                <>
+                  <div className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">
+                    Trending Searches in BD
+                  </div>
+                  <div className="flex flex-wrap gap-2 mb-4">
+                    {['Heritage Bath Towel 3-Set', 'Cleo Enigma Pillow Cover', 'Monrowe Wall Clock', 'Retro TV Tissue Box', 'Space Saving Shelf'].map((term, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setSearchQuery(term)}
+                        className="text-xs bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg hover:bg-sky-50 hover:text-sky-600 transition"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
