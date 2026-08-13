@@ -64,4 +64,13 @@ export const authService = {
     const { data } = await api.post("/auth/verify-phone", { token });
     return data;
   },
+
+  // OAuth methods
+  getGoogleAuthUrl() {
+    return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/oauth/google`;
+  },
+
+  getFacebookAuthUrl() {
+    return `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/oauth/facebook`;
+  },
 };

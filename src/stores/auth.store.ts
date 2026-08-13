@@ -15,6 +15,7 @@ interface AuthState {
   register: (email: string, password: string, name?: string, phone?: string) => Promise<void>;
   logout: () => Promise<void>;
   refreshTokens: () => Promise<void>;
+  handleOAuthCallback: (accessToken: string, refreshToken: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -82,6 +83,17 @@ export const useAuthStore = create<AuthState>()(
           get().setTokens(data.accessToken, data.refreshToken);
         } catch {
           get().logout();
+        }
+      },
+
+      handleOAuthCallback: async (accessToken, refreshToken) => {
+        get().setTokens(accessToken, refreshToken);
+        // Fetch user data after OAuth login
+        try {
+          const user = await authService.getMe();
+          get().setUser(user);
+        } catch (error) {
+          console.error('Failed to fetch user after OAuth:', error);
         }
       },
     }),
