@@ -20,11 +20,11 @@ export default function HomePage() {
         {/* Competitor Banner Strip */}
         <section className="bg-sky-900 text-white py-4 px-4 text-center text-xs sm:text-sm font-medium flex items-center justify-center gap-3">
           <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
-          <span>Curated Home Decor & Compact Apartment Accessories • Bangladesh Sector Configured</span>
-          <Link href="/admin/barcodes" className="underline hover:text-amber-300 font-bold ml-2">
-            Try 12-Digit Barcode Engine →
-          </Link>
-        </section>
+           <span>Curated Home Decor & Compact Apartment Accessories • Bangladesh Sector Configured</span>
+           <Link href="/products" className="underline hover:text-amber-300 font-bold ml-2">
+             Explore Products →
+           </Link>
+         </section>
 
         {/* 3. Trending Product Grid & Series Showcase */}
         <ProductGrid />
